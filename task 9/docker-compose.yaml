@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    image: 127.0.0.1:5000/web-swarm-task
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    networks:
+      - my-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=somepassword123
+      - POSTGRES_DB=itmo_db
+    deploy:
+      mode: replicated
+      replicas: 4
+  db:
+    image: postgres:14.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - my-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=somepassword123
+      - POSTGRES_DB=itmo_db
+volumes:
+  postgres_data:
+networks:
+  my-network:
